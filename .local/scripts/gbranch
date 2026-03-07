@@ -1,0 +1,18 @@
+#!/bin/sh
+set -eu
+
+        # --format="%(refname:short)|%(committerdate:short)|%(authorname)|%(subject)" \
+
+branch_line=$(
+    git for-each-ref refs/heads refs/remotes \
+        --sort=-committerdate \
+        --format="%(refname:short)|%(committerdate:relative)|%(authorname)|%(subject)" \
+        | column -t -s '|' \
+        | fzf --ansi --prompt="Switch to branch: "
+)
+
+[ -z "${branch_line:-}" ] && exit 0
+
+branch=${branch_line%% *}
+
+(git switch "$branch" || git switch --track "$branch") 2>/dev/null

@@ -1,0 +1,115 @@
+#!/bin/sh
+# ============================================================================ #
+#  v0.1.0 -                                                      - by numen-0  #
+# ============================================================================ #
+#                                                                              #
+#   snip - template handler                                                    #
+#                                                                              #
+# - Usage -------------------------------------------------------------------- #
+#                                                                              #
+#   snip TMPL [DEST]                                                           #
+#                                                                              #
+#   > Note: for more info do `snip help`                                       #
+#                                                                              #
+# - License ------------------------------------------------------------------ #
+#                                                                              #
+#   This software is licensed under the MIT License.                           #
+#                                                                              #
+# ============================================================================ #
+set -eu
+
+vebose=true
+info() { $vebose && echo "snip: $*"; }
+die()  { echo "snip:error: $@" >&2; exit 1; }
+
+SRC_DIR="${XDG_TEMPLATES_DIR:-$HOME/Templates}/snip"
+SUPPORTED="$(cat <<EOF | paste -sd',' | sed 's/,/, /g'
+bob
+c
+clang-format
+editorconfig
+mit
+script
+sh
+stb
+todo
+EOF
+)"
+DEST=""
+MOD="__MODULE__"
+MDEST="__FILE__"
+
+TMPL="${1:-}"
+DEST="${2:-}"
+
+if [ -z "$TMPL" ] || [ "$TMPL" = "help" ]; then
+    cat <<EOF 1>&2
+Usage: snip TMPL [FILE]
+       if FILE is not given a default name will be used
+Types: $SUPPORTED
+EOF
+    exit 1
+fi
+
+# snip select
+case "$TMPL" in
+    bob)           SRC="$SRC_DIR/bob";;
+    c)             SRC="$SRC_DIR/main.c";;
+    clang-format)  SRC="$SRC_DIR/.clang-format";;
+    editorconfig)  SRC="$SRC_DIR/.editorconfig";;
+    mit)           SRC="$SRC_DIR/mit.txt";;
+    script)        SRC="$SRC_DIR/script.sh";;
+    sh)            SRC="$SRC_DIR/dash.sh";;
+    stb)           SRC="$SRC_DIR/stb-2.0.h";;
+    todo)          SRC="$SRC_DIR/todo";;
+    *) die "no template for '$TMPL' (suported: $SUPPORTED)";;
+esac
+
+[ -f "$SRC" ]  || die "template file doesn't exist '$SRC'"
+
+# get snip name
+if [ -z "$DEST" ]; then
+    case "$TMPL" in
+        bob)           DEST="bob";;
+        c)             DEST="main.c";;
+        clang-format)  DEST=".clang-format";;
+        editorconfig)  DEST=".editorconfig";;
+        mit)           DEST="LICENSE";;
+        script)        DEST="script.sh";;
+        sh)            DEST="dash.sh";;
+        stb)           DEST="stb.h";;
+        todo)          DEST=".todo";;
+        *) die "(0) Unreachable or not implemented '$TMPL'";
+    esac
+    info "default name selected '$DEST'"
+fi
+
+[ -f "$DEST" ] && die "file already exist '$DEST', delete it firts"
+
+# set vars
+if [ "$TMPL" = "stb" ] || [ "$TMPL" = "mole" ]; then
+    MOD="$(basename "${DEST%.h}" | tr '[:lower:]' '[:upper:]' | tr '.' '_')"
+fi
+
+USR="numen-0"
+YEAR="$(date +%Y)"
+BDEST="$(basename "$DEST")"
+
+# set vars
+if $vebose; then f="-v"; else f=""; fi
+case "$TMPL" in
+    bob|c|clang-format|editorconfig|sh|todo) cp $f "$SRC" "$DEST";;
+    mit)        sed -e "s|__USER__|${USR}|g"   \
+                    -e "s|__YEAR__|${YEAR}|g"  \
+                    "$SRC" > "$DEST";;
+    stb)        sed -e "s|__MODULE__|${MOD}|g" \
+                    -e "s|__USER__|${USR}|g"   \
+                    -e "s|__YEAR__|${YEAR}|g"  \
+                    -e "s|__FILE__|${BDEST}|g" \
+                    "$SRC" > "$DEST";;
+    script)     sed -e "s|__FILE__|${BDEST}|g" \
+                    -e "s|__USER__|${USR}|g"   \
+                    "$SRC" > "$DEST";;
+    *) die "(1) Unreachable or not implemented '$TMPL'";
+esac
+

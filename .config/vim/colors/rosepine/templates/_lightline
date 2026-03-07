@@ -1,0 +1,50 @@
+auxfile autoload/lightline/colorscheme/@shortname.vim
+
+if &background ==# '@background'
+    let s:base    = [ '@guibase', @term256base ]
+    let s:surface = [ '@guisurface', @term256surface ]
+    let s:overlay = [ '@guioverlay', @term256overlay ]
+    let s:muted   = [ '@guimuted', @term256muted ]
+    let s:subtle  = [ '@guisubtle', @term256subtle ]
+    let s:text    = [ '@guitext', @term256text ]
+    let s:love    = [ '@guilove', @term256love ]
+    let s:gold    = [ '@guigold', @term256gold ]
+    let s:rose    = [ '@guirose', @term256rose ]
+    let s:pine    = [ '@guipine', @term256pine ]
+    let s:foam    = [ '@guifoam', @term256foam ]
+    let s:iris    = [ '@guiiris', @term256iris ]
+
+    let s:p = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': {}, 'tabline': {}}
+
+    let s:p.normal.left     = [ [ s:base, s:rose, 'bold' ], [ s:text, s:surface ] ]
+    let s:p.normal.right    = [ [ s:base, s:rose ], [ s:text, s:surface ] ]
+    let s:p.normal.middle   = [ [ s:text, s:surface ] ]
+    let s:p.normal.error    = [ [ s:overlay, s:iris ] ]
+    let s:p.normal.warning  = [ [ s:surface, s:foam ] ]
+
+    let s:p.inactive.left   = [ [ s:overlay, s:surface ], [ s:overlay, s:surface ] ]
+    let s:p.inactive.right  = [ [ s:overlay, s:surface ], [ s:overlay, s:surface ] ]
+    let s:p.inactive.middle = [ [ s:overlay, s:surface ] ]
+
+    let s:p.insert.left     = [ [ s:base, s:pine, 'bold' ], [ s:text, s:surface ] ]
+    let s:p.insert.right    = [ [ s:base, s:pine ], [ s:text, s:surface ] ]
+    let s:p.insert.middle   = [ [ s:text, s:surface ] ]
+
+    let s:p.replace.left    = [ [ s:base, s:love, 'bold' ], [ s:text, s:surface ] ]
+    let s:p.replace.right   = [ [ s:base, s:love ], [ s:text, s:surface ] ]
+    let s:p.replace.middle  = [ [ s:text, s:surface ] ]
+
+    let s:p.visual.left     = [ [ s:base, s:gold, 'bold' ], [ s:text, s:base ] ]
+    let s:p.visual.right    = [ [ s:base, s:gold ], [ s:text, s:base ] ]
+    let s:p.visual.middle   = [ [ s:text, s:surface ] ]
+
+    let s:p.tabline.left    = [ [ s:subtle, s:surface ] ]
+    let s:p.tabline.right   = [ [ s:base, s:subtle ] ]
+    let s:p.tabline.middle  = [ [ s:base, s:overlay ] ]
+    let s:p.tabline.tabsel  = [ [ s:base, s:iris ] ]
+
+    let g:lightline#colorscheme#@shortname#palette = lightline#colorscheme#flatten(s:p)
+
+endif
+
+endauxfile

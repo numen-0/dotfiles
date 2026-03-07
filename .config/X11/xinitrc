@@ -1,0 +1,19 @@
+#
+# .xinitrc
+#
+
+# keys
+setxkbmap -layout es
+setxkbmap -option caps:escape
+# xbindkeys -f "$HOME/.config/xbindkeys/config" &
+
+# visual
+statusbar &
+feh --no-fehbg --bg-fill "$HOME/stuff/pictures/wall/wallpaper.jpg" &
+picom &
+# xautolock -time 15 -locker "slock" -detectsleep &
+# xautolock -time 15 -locker "slock" &
+
+# wm
+exec dwm
+

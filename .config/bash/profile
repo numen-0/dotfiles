@@ -1,0 +1,69 @@
+#
+# .bash_profile
+#
+
+# clean $HOME
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+export XDG_CACHE_HOME="$HOME/.local/cache"
+export XDG_RUNTIME_DIR="$HOME/.local/runtime"
+
+[ -f "$XDG_CONFIG_HOME/user-dirs.dirs" ] && . "$XDG_CONFIG_HOME/user-dirs.dirs"
+export XDG_DESKTOP_DIR
+export XDG_DOWNLOAD_DIR
+export XDG_TEMPLATES_DIR
+export XDG_PUBLICSHARE_DIR
+export XDG_DOCUMENTS_DIR
+export XDG_MUSIC_DIR
+export XDG_PICTURES_DIR
+export XDG_VIDEOS_DIR
+
+mkdir -p "$XDG_CONFIG_HOME" \
+    "$XDG_DATA_HOME"        \
+    "$XDG_STATE_HOME"       \
+    "$XDG_CACHE_HOME"       \
+    "$XDG_RUNTIME_DIR"
+
+alias xbindkeys='xbindkeys -f $XDG_CONFIG_HOME/xbindkeys/config'
+export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
+export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
+export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/pythonrc"
+export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export MINIKUBE_HOME="$XDG_DATA_HOME/minikube"
+export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
+export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
+export HISTFILE="$XDG_STATE_HOME/bash/history"
+export LESSHISTFILE="/dev/null"
+export PYTHONSTARTUP="$XDG_CONFIG_HOME"/python/pythonrc
+export NODE_REPL_HISTORY="$XDG_STATE_HOME"/node_repl_history
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+alias wget='wget --hsts-file $XDG_DATA_HOME/.wget-hsts'
+
+export NVM_DIR="$HOME/.config/nvm"
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
+export NPM_CONFIG_INIT_MODULE="$XDG_CONFIG_HOME"/npm/config/npm-init.js
+export NPM_CONFIG_CACHE="$XDG_CACHE_HOME"/npm
+export NPM_CONFIG_TMP="$XDG_RUNTIME_DIR"/npm
+
+# setup PATH
+[ -d "$HOME/.local/scripts" ] && {
+    PATH="$HOME/.local/scripts:$PATH"
+    [ -d "$HOME/.local/scripts/cool" ] && \
+        PATH="$HOME/.local/scripts/cool:$PATH"
+    [ -d "$HOME/.local/scripts/private" ] && \
+        PATH="$HOME/.local/scripts/private:$PATH"
+}
+[ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
+
+# source .bashrc
+# [ -f $HOME/.bashrc ] && . $HOME/.bashrc
+
+# if command -v "$HOME/.local/scripts/brightness" >/dev/null 2>&1; then
+#     "$HOME/.local/scripts/brightness" norm
+# else
+#     echo "brightness command not found"
+# fi
+
+# startx only in tty 1
+[ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ] && exec startx

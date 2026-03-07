@@ -1,0 +1,10 @@
+.todo
+
+*.bk
+*.o
+*.orig
+*.rej
+
+/.config/vim/viminfo
+/.config/vim/.netrwhist
+/.config/vim/pack

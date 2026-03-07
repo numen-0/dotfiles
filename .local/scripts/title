@@ -1,0 +1,121 @@
+#!/bin/sh
+set -eu
+
+help() {
+    cat <<EOF
+Usage: title [OPTIONS] [TEXT]...
+
+Description: Generate framed title comments.
+
+Options:
+    style:
+        -c CHAR|EXT|FT  : comment style (#, main.c, .lua, python, ...)
+        -w WIDTH        : total width (default: 79)
+    fill:
+        -e  : empty
+        -f  : fill      (default)
+    justify:
+        -l  : left      (default)
+        -r  : right
+        -m  : middle
+    border:
+        -n  : no border (default)
+        -t  : add a filled line on top
+        -b  : add a filled line on bottom
+Examples:
+    echo "Title" | title -m -t -b -c sh
+    title -c file.c -tbm "Hello World"
+EOF
+}
+
+# state
+style="-"
+width=79
+fill="fill"      # fill | empty
+justify="left"   # left | right | middle
+top=0
+bottom=0
+
+while getopts "c:w:eflrmntbh" opt; do
+    case "$opt" in
+        c) style="$OPTARG" ;;
+        w) width="$OPTARG" ;;
+        f) fill="fill" ;;
+        e) fill="empty" ;;
+        l) justify="left" ;;
+        r) justify="right" ;;
+        m) justify="middle" ;;
+        n) top=0; bottom=0 ;;
+        t) top=1 ;;
+        b) bottom=1 ;;
+        h) help; exit 0 ;;
+        *) echo "invalid flag '$opt', try '$0 -h' for more info" >&2; exit 1 ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+case "$style" in
+    *.h|*.c|c|*.js|javascript) BDR="/"; CHAR="*" ;;
+    *.lua|lua) BDR="-"; CHAR="-"; ;;
+    *.py|*.sh|python|bash|sh) BDR="#"; CHAR="#" ;;
+    *)  BDR="${CHAR:=$style}" ;;
+esac
+
+inner=$((width - 2))
+fillw=$((inner - 4))
+
+pad_char="$CHAR"
+[ "$fill" = "empty" ] && pad_char=" "
+
+no_text="$BDR$(printf "%${inner}s" "" | tr " " "$CHAR")$BDR"
+no_text_empty="$BDR$CHAR$(printf "%$((inner - 2))s" "")$CHAR$BDR"
+
+[ "$top" -eq 1 ] && echo "$no_text";
+
+# Read from stdin if piped; otherwise, use $1 for TEXT
+if [ -t 0 ]; then
+    printf "%s\n" "$@"
+else
+    cat
+fi  | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' \
+    | while IFS= read -r line || [ -n "$line" ]; do
+    [ -z "$line" ] && {
+        [ "$fill" = "fill" ] \
+            && echo "$no_text" \
+            || echo "$no_text_empty"
+        continue
+    }
+
+    n=${#line}
+    [ "$n" -gt "$fillw" ] && echo "$BDR$CHAR $line" && continue
+
+    pad=$((fillw - n))
+
+    case "$justify" in
+        left)
+            printf "%s %s %s%s\n" \
+                "$BDR$CHAR" \
+                "$line"  \
+                "$(printf "%${pad}s" | tr " " "$pad_char")" \
+                "$CHAR$BDR"
+            ;;
+        right)
+            printf "%s%s %s %s\n" \
+                "$BDR$CHAR" \
+                "$(printf "%${pad}s" | tr " " "$pad_char")" \
+                "$line"  \
+                "$CHAR$BDR"
+            ;;
+        middle)
+            l=$((pad / 2)); r=$((pad - l));
+            printf "%s%s %s %s%s\n" "$BDR$CHAR" \
+                "$(printf "%${l}s" | tr " " "$pad_char")" \
+                "$line" \
+                "$(printf "%${r}s" | tr " " "$pad_char")" \
+                "$CHAR$BDR"
+            ;;
+    esac
+done
+
+[ "$bottom" -eq 1 ] && echo "$no_text";
+

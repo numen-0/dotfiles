@@ -1,0 +1,9 @@
+[user]
+	email = iniduen@gmail.com
+	name = numen
+[merge]
+	conflictStyle = zdiff3
+[rerere]
+	enabled = true
+[init]
+	defaultBranch = main

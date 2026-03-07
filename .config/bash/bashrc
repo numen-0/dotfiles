@@ -1,0 +1,95 @@
+# .bashrc
+
+# If not running interactively, don't do anything
+case "$-" in
+  *i*) ;;
+  *) return ;;
+esac
+
+# env
+export EDITOR="nvim"
+export VISUAL="nvim"
+export BROWSER="firefox"
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# color
+[ -x /usr/bin/dircolors ] && eval "$(dircolors -b)"
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+export GREP_COLORS='ms=2;37'
+
+export MANPAGER="less -R"
+true && { # [green]
+    export LESS_TERMCAP_mb=$'\e[1;35m'    # blink
+    export LESS_TERMCAP_md=$'\e[1;32m'    # bold
+    export LESS_TERMCAP_so=$'\e[1;30;42m' # standout
+    export LESS_TERMCAP_us=$'\e[1;92m'    # underline
+} || { # [orange]
+    export LESS_TERMCAP_mb=$'\e[1;35m'    # blink
+    export LESS_TERMCAP_md=$'\e[1;33m'    # bold
+    export LESS_TERMCAP_so=$'\e[1;30;43m' # standout
+    export LESS_TERMCAP_us=$'\e[1;95m'    # underline
+}
+export LESS_TERMCAP_me=$'\e[0m' # reset bold & blink
+export LESS_TERMCAP_se=$'\e[0m' # reset standout
+export LESS_TERMCAP_ue=$'\e[0m' # reset underline
+# thanks: https://unix.stackexchange.com/questions/119/colors-in-man-pages
+export GROFF_NO_SGR=1 # For Konsole and Gnome-terminal
+
+# bash
+if [ -n "$BASH_VERSION" ]; then
+    # completion
+    complete -cf man sudo which tldr
+    [ "$PS1" ] && [ -f "/usr/share/bash-completion/bash_completion" ] && \
+        . /usr/share/bash-completion/bash_completion
+
+    # shopt
+    shopt -s autocd                # quick cd
+    shopt -s cdspell               # autocorrect misspelings
+    shopt -s checkwinsize          # check the window size (default)
+    shopt -s cmdhist               # compact command into 1 line to save in hist
+    shopt -s complete_fullquote    # quote stuff (default, bash +4.2v)
+    shopt -s dotglob               # include '.dotfiles' in glob expansion
+    shopt -s expand_aliases        # expand aliases (default)
+    shopt -s extglob               # extend pattern matching
+    shopt -s extquote              # $'str' & $"str" -> ${str} (default)
+    shopt -s force_fignore         # ignore matches with suffixes in $fignore (default)
+    shopt -s globasciiranges       # when expanding [a-d] -> [abcd]
+    shopt -s globskipdots          # dont match '.' and '..' pathnames
+    shopt -s histappend            # dont overwrite history
+    shopt -s interactive_comments  # treat comments (#) as comments (default)
+    shopt -s patsub_replacement    # (default)
+    shopt -s progcomp              # catch replaced string ${str/match/&.txt} (default)
+    shopt -s promptvars            # 'eval' promt (default)
+    shopt -s sourcepath            # use path to find commands (default)
+fi
+
+# set
+# set -o vi
+
+# bind
+bind "set completion-ignore-case on"
+bind -x '"\C-g":"fg"' # most recent suspended job
+
+# hist
+HISTCONTROL="erasedups:ignoreboth"
+HISTSIZE=2000
+HISTFILESIZE=2000
+
+# bs
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# stuff
+[ -f "$HOME/.config/bash/aliases" ]   \
+    && . "$HOME/.config/bash/aliases"
+[ -f "$HOME/.config/bash/functions.sh" ] \
+    && . "$HOME/.config/bash/functions.sh"
+[ -f "$HOME/.config/bash/shortcuts.sh" ] \
+    && . "$HOME/.config/bash/shortcuts.sh"
+
+# PS1='[\u@\h \W]\$ '
+
+# done
+# echo "( ·_·)b"
+#

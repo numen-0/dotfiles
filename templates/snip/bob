@@ -1,0 +1,44 @@
+#!/bin/sh
+set -eu
+
+CLEAN_UP=true
+TIME=true
+
+## bobs tools #################################################################
+
+R="\e[0m"
+BOB="( c-[//]-[//])"
+C1="\e[32;1m"
+C2="\e[92m"
+C3="\e[95m"
+R="\e[0m"
+
+${TIME:-false} && alias eval='eval time'
+
+bob_init() {
+    printf "${C1}%s${R}\n" "bob is cooking $BOB"
+}
+bob_end() {
+    printf "${C1}%s${R}\n" "bob cooked $BOB"
+}
+bob_say() {
+    printf "${C2}[bob]${R}: %s\n" "$*"
+}
+bob_cmd() {
+    printf "${C3}%s${R}\n" "$*"
+    eval "$*"
+}
+
+## script #####################################################################
+
+bob_init
+
+# TODO
+
+${CLEAN_UP:-false} && {
+    true
+}
+
+bob_end
+
+###############################################################################

@@ -1,0 +1,82 @@
+[window]
+padding = { x = 10, y = 10 }
+opacity = 0.75
+decorations = "Full"
+decorations_theme_variant = "Dark"
+
+[font]
+size = 10
+
+[font.normal]
+family = "Maple Mono NF"
+
+[font.bold]
+family = "Maple Mono NF"
+
+[font.italic]
+family = "Maple Mono NF"
+
+[font.bold_italic]
+family = "Maple Mono NF"
+
+[cursor]
+# style = "Block"
+style = "Underline"
+# blink_interval = 500
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[keyboard]
+bindings = [
+  { key = "V", mods = "Control|Shift", action = "Paste" },
+  { key = "C", mods = "Control|Shift", action = "Copy" },
+  { key = "p", mods = "Alt", action = "SpawnNewInstance" },
+  { key = "+", mods = "Alt", action = "IncreaseFontSize" },
+  { key = "-", mods = "Alt", action = "DecreaseFontSize" },
+  { key = "*", mods = "Alt|Shift", action = "ResetFontSize" },
+  { key = "k", mods = "Alt|Shift", action = "ScrollLineUp" },
+  { key = "j", mods = "Alt|Shift", action = "ScrollLineDown" },
+  { key = "u", mods = "Alt|Shift", action = "ScrollPageUp" },
+  { key = "d", mods = "Alt|Shift", action = "ScrollPageDown" },
+]
+
+[mouse]
+hide_when_typing = true
+
+[colors.primary]
+background = "#000000"
+foreground = "#cdd6f4"
+
+[colors.cursor]
+text = "#000000"
+cursor = "#ffffff"
+
+[colors.selection]
+text = "CellForeground"
+background = "#44475a"
+
+[colors.normal]
+black   = "#222222"
+red     = "#e84f4f"
+green   = "#b7ce42"
+yellow  = "#fea63c"
+blue    = "#66aabb"
+magenta = "#b74163"
+cyan    = "#6d878d"
+white   = "#dddddd"
+
+
+[colors.bright]
+black   = "#888888"
+red     = "#d23d3d"
+green   = "#bde077"
+yellow  = "#ffe863"
+blue    = "#aaccbb"
+magenta = "#e16a98"
+cyan    = "#42717b"
+white   = "#cccccc"
+
+[env]
+TERM = "xterm-256color"

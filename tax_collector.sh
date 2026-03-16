@@ -2,13 +2,18 @@
 set -eu
 # copy files into current dotfiles repo, preserving paths
 
-DIR="$(pwd)"
+backup=true
+
+DIR="."
+BK_DIR="$DIR/.bk/$(date +%s)"
+
 TARGETS="
 $HOME/.config/X11
+$HOME/.config/alacritty/
+$HOME/.config/bash
 $HOME/.config/git
 $HOME/.config/nvim
 $HOME/.config/vim
-$HOME/.config/bash
 $HOME/.local/programs/suckless
 $HOME/.local/scripts/gbranch
 $HOME/.local/scripts/gunterfetch
@@ -46,10 +51,17 @@ grab() {
     dest="$DIR/$rel"
     target="$(basename "$src")"
 
-    echo "grabbing: $target > $rel"
+    echo "[grabbing]: $target > $rel"
 
-    # # backup existing
-    # [ -e "$dest" ] && mv -v "$dest" "$dest.$(date +%s).bk"
+    # backup existing
+    [ -e "$dest" ] && {
+        $backup && {
+            bk_dir="$BK_DIR/$rel"
+            mkdir -p "$(dirname "$bk_dir")"
+            mv -v "$dest" "$bk_dir"
+        }
+        rm -rf $dest
+    }
 
     mkdir -vp "$(dirname "$dest")"
     cp -av "$src" "$dest"
@@ -65,3 +77,4 @@ for t in $TARGETS; do
     grab "$t"
 done
 
+$backup && echo "[backup]: generated at '$BK_DIR'"

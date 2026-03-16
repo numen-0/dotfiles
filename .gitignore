@@ -1,10 +1,9 @@
-.todo
-
 *.bk
 *.o
 *.orig
 *.rej
 
+/.bk/
 /.config/vim/viminfo
 /.config/vim/.netrwhist
 /.config/vim/pack

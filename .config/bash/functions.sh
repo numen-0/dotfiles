@@ -73,10 +73,14 @@ parse_dir() {
 
 PROMPT_COMMAND='LAST_EXIT=$?;'
 ps1_icon() {
-    [ 0 -eq "$LAST_EXIT" ] && printf '\e[0;1;92m :D \e[0m' || printf '\e[0;1;31m xD \e[0m'
+    [ 0 -eq "$LAST_EXIT" ] \
+        && printf '\e[0;1;92m :D \e[0m' \
+        || printf '\e[0;1;31m xD \e[0m'
 }
 ps1_color() {
-    [ 0 -eq "$LAST_EXIT" ] && printf '\e[92m' || printf '\e[31m'
+    [ 0 -eq "$LAST_EXIT" ] \
+        && printf '\e[92m' \
+        || printf '\e[31m'
 }
 _PS1=false
 toggle() {
@@ -88,7 +92,6 @@ toggle() {
         export PS1='\[\e[1;7m\]\[\e[95m\]$(parse_venv)\[\e[31m$(parse_git)\[\e[35m\]$(parse_jobs)$(parse_dir)\[\e[0m\]\n$(ps1_icon)'
     fi
 } && export toggle && toggle
-# export PS1='$(ps1_icon)'
 
 # swap
 swap() {
@@ -140,8 +143,12 @@ EOF
 
 # Cool navigation
 VERBOSE_JUMP=true
-# SELECTOR="fzf --ansi --border=rounded --preview 'tree -m -p {} -y 64' --tiebreak=\"begin,length\""
-SELECTOR="dmenu -c -l 10"
+selector() {
+    # dmenu -c -l 10
+    fzf --ansi --border=rounded --tiebreak=begin,length \
+        --preview 'tree --gitignore --dirsfirst --sort=name {}'
+
+}
 
 N_PLACES="$(cat <<EOF
 $(find "$HOME/.local/programs" -maxdepth 1 -type d)
@@ -167,18 +174,18 @@ $N_PLACES
 EOF
 )"
 
-N_PLACES="$(printf "%b" "$N_PLACES" | sed -e "s|$HOME|~|" -e "s|/$||" | sort -u)"
-G_PLACES="$(printf "%b" "$G_PLACES" | sed -e "s|$HOME|~|" -e "s|/$||" | sort -u)"
+N_PLACES="$(printf "%b" "$N_PLACES" | sort -u)"
+G_PLACES="$(printf "%b" "$G_PLACES" | sort -u)"
 
 # go to path
 g_() {
-    JUMP="$(printf "%b" "$G_PLACES" | sort -f | ${SELECTOR} | sed "s|~|$HOME|")"
+    JUMP="$(printf "%b" "$G_PLACES" | sort -f | selector | sed "s|~|$HOME|")"
 
     [ -d "$JUMP" ] && cd "$JUMP" && $VERBOSE_JUMP && pwd
 }
 # nvim to path
 n_() {
-    JUMP="$(printf "%b" "$N_PLACES" | sort -f | ${SELECTOR} | sed "s|~|$HOME|")"
+    JUMP="$(printf "%b" "$N_PLACES" | sort -f | selector | sed "s|~|$HOME|")"
 
     [ -d "$JUMP" ] && cd "$JUMP" && { $VERBOSE_JUMP && pwd; $EDITOR; }
 }

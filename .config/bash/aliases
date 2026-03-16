@@ -21,7 +21,8 @@ alias peek='feh -d -S filename -.'
 alias copy='xclip -selection clipboard'
 alias clipboard='xclip -o | xclip -selection clipboard'
 
-alias tree='tree --gitignore'
+# alias tree='tree --gitignore'
+alias tree='tree --gitignore --dirsfirst --sort=name'
 alias dtree='find . -type d | sed "s.[^/]*/. | .g"'
 
 # from: https://gist.github.com/mwhite/6887990

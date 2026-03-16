@@ -4,6 +4,7 @@
 *.rej
 
 /.bk/
-/.config/vim/viminfo
+/.config/bash/shortcuts.sh
 /.config/vim/.netrwhist
 /.config/vim/pack
+/.config/vim/viminfo

@@ -153,7 +153,7 @@ selector() {
 N_PLACES="$(cat <<EOF
 $(find "$HOME/.local/programs" -maxdepth 1 -type d)
 $(find "$HOME/.local/programs/suckless" -maxdepth 1 -type d)
-$(find "$HOME/stuff/code" -maxdepth 1 -type d)
+$(find "$HOME/stuff/code" -maxdepth 1 -type d | grep -Ev '.*\.(bk|old)[0-9]*$')
 $XDG_CONFIG_HOME
 $XDG_CONFIG_HOME/bash
 $XDG_CONFIG_HOME/vim

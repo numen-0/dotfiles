@@ -1,11 +1,14 @@
+# https://alacritty.org/config-alacritty.html
+
 [window]
-padding = { x = 10, y = 10 }
+# padding = { x = 10, y = 10 }
+padding = { x = 0, y = 0 }
 opacity = 0.75
 decorations = "Full"
 decorations_theme_variant = "Dark"
 
 [font]
-size = 10
+size = 9
 
 [font.normal]
 family = "Maple Mono NF"
@@ -20,9 +23,7 @@ family = "Maple Mono NF"
 family = "Maple Mono NF"
 
 [cursor]
-# style = "Block"
 style = "Underline"
-# blink_interval = 500
 
 [scrolling]
 history = 10000
@@ -45,17 +46,11 @@ bindings = [
 [mouse]
 hide_when_typing = true
 
-[colors.primary]
-background = "#000000"
-foreground = "#cdd6f4"
-
-[colors.cursor]
-text = "#000000"
-cursor = "#ffffff"
-
-[colors.selection]
-text = "CellForeground"
-background = "#44475a"
+[colors]
+primary   = { background = "#000000", foreground = "#ffffff" }
+# cursor  = { text = "#000000", cursor = "#ffffff" }
+cursor    = { text = "CellBackground", cursor = "CellForeground" }
+selection = { text = "CellForeground", cursor = "CellForeground" }
 
 [colors.normal]
 black   = "#222222"
@@ -66,7 +61,6 @@ blue    = "#66aabb"
 magenta = "#b74163"
 cyan    = "#6d878d"
 white   = "#dddddd"
-
 
 [colors.bright]
 black   = "#888888"

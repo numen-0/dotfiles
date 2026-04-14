@@ -108,9 +108,8 @@ R = function(module)
 end
 
 RR = function()
-    -- R("glide").setup({})
-    -- R("temoji").setup({})
-    R("myplugs.shell").setup({})
+    -- R("myplugs.shell").setup({})
+    R("doodle").setup({})
     vim.notify("plugins reloaded")
 end
 

@@ -2,6 +2,7 @@ return {
     { "rose-pine/neovim", name = "rose-pine" },
     {
         "numen-0/leun.nvim",
+        -- dir = "~/stuff/code/nvim/leun.nvim",
         lazy = false,
         name = "leun",
         dependencies = { "rktjmp/lush.nvim" },

@@ -97,7 +97,7 @@ return {
         "numen-0/beta.nvim",
         priority = 500,
         opts = {
-            logo         = {
+            logo = {
                 lines = {
                     [[┳┓    ┓┏•    ]],
                     [[┃┃┏┓┏┓┃┃┓┏┳┓ ]],
@@ -105,29 +105,42 @@ return {
                 },
                 align = { offset = 0, style = "center" },
             },
-            text         = {
+            text = {
                 lines = {
                     [["An idiot admires complexity, a genius admires simplicity"]],
                     [[                                            Terry A. Davis]],
                 },
                 align = { offset = 0, style = "center" },
             },
-            gap          = 0,
+            gap = 0,
             user_command = false,
             hide_cursor  = false,
             unload_after = true,
         },
     },
     {
+        -- "numen-0/doodle.nvim",
+        dir = "~/stuff/code/nvim/doodle.nvim",
+        opts = {},
+    },
+    {
+        -- "numen-0/chisel.nvim",
+        dir = "~/stuff/code/nvim/chisel.nvim",
+        opts = {},
+    },
+    {
         -- "numen-0/glide.nvim",
-        dir = "~/stuff/code/glide.nvim",
-        config = function()
-            require("glide").setup({})
-        end,
+        dir = "~/stuff/code/nvim/glide.nvim",
+        opts = {},
+    },
+    {
+        -- "numen-0/jab.nvim",
+        dir = "~/stuff/code/nvim/jab.nvim",
+        opts = {},
     },
     {
         -- "numen-0/temoji.nvim",
-        dir = "~/stuff/code/temoji.nvim",
+        dir = "~/stuff/code/nvim/temoji.nvim",
         dependencies = {
             "nvim-telescope/telescope.nvim",
             "nvim-lua/plenary.nvim",
@@ -137,6 +150,7 @@ return {
             temoji.setup({
                 packs = {
                     ["ext"] = {
+                        "ext", "hi",
                         { rep = "<><",      tags = { "fish" } },
                         { rep = "('._.)",   tags = { "nervous", "big" } },
                         { rep = ">:(",      tags = { "angly" } },

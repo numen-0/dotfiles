@@ -50,4 +50,21 @@ M.new({ 'BufReadPre', 'BufNewFile' }, {
     end,
 })
 
+M.new("FileType", {
+    desc = 'Set tabwith to down to 2 on filetype',
+    pattern = { "yaml", "yml", "json", "markdown" },
+    callback = function()
+        vim.opt_local.tabstop = 2
+        vim.opt_local.shiftwidth = 2
+        vim.opt_local.softtabstop = 2
+    end,
+})
+M.new("FileType", {
+    desc = 'Enable list and listchars on filetype',
+    pattern = { "python", "yaml", "yml", "json", },
+    callback = function()
+        vim.opt_local.list = true
+    end,
+})
+
 return M

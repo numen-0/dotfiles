@@ -22,7 +22,7 @@ return {
                 biome = true,
                 cssls = true,
                 html = true,
-                lua_ls = {
+                luals = {
                     capabilities = {
                         offsetEncoding = "utf-8",
                     },

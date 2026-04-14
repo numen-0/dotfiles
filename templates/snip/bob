@@ -1,44 +1,55 @@
 #!/bin/sh
 set -eu
 
-CLEAN_UP=true
-TIME=true
+#* flags
+: "${CLEAN_UP=true}"
+: "${TIME=true}"
+: "${COLOR=true}"
+: "${DEBUG=true}"
 
-## bobs tools #################################################################
+#* params
+# TODO
 
-R="\e[0m"
-BOB="( c-[//]-[//])"
-C1="\e[32;1m"
-C2="\e[92m"
-C3="\e[95m"
-R="\e[0m"
+## funcs #######################################################################
 
-${TIME:-false} && alias eval='eval time'
+is_truthy() { case "${1:-}" in true|1|yes|on) return 0 ;; esac; return 1; }
 
-bob_init() {
-    printf "${C1}%s${R}\n" "bob is cooking $BOB"
-}
-bob_end() {
-    printf "${C1}%s${R}\n" "bob cooked $BOB"
-}
-bob_say() {
-    printf "${C2}[bob]${R}: %s\n" "$*"
-}
-bob_cmd() {
-    printf "${C3}%s${R}\n" "$*"
-    eval "$*"
-}
+is_truthy "${COLOR:-}" && {
+    R="\e[0m"
+    CBOB="\e[1;7;34m"
+    CDEB="\e[1;7;35m"
+    CSAY="\e[1;7;32m"
+    CCMD="\e[1;7;37m"
+    CWAR="\e[1;7;33m"
+    CERR="\e[1;7;31m"
+} || { R=""; CBOB=""; CDEB=""; CSAY=""; CCMD=""; CWAR=""; CERR=""; }
 
-## script #####################################################################
+if is_truthy "${TIME:-}"; then
+    _eval() { eval time "$@"; } else _eval() { eval "$@"; } fi
 
-bob_init
+bob()   { printf "${CBOB} bob ${R} %s\n" "$*"; }
+info()  { printf "${CSAY} info ${R} %s\n" "$*"; }
+error() { printf "${CERR} error ${R} %s\n" "$*"; }
+warn()  { printf "${CWAR} warn ${R} %s\n" "$*"; }
+cmd()   { printf "${CCMD} cmd ${R} %s\n" "$*"; _eval "$@"; }
+cmd2()  { printf "${CCMD} cmd ${R} %s\n" "$*"; "$@"; }
+debug() { is_truthy "${DEBUG:-}" && printf "${CDEB} debug ${R} %s\n" "$*"; }
+die()   { error "$*"; exit 1; }
+
+init() { bob "is cooking..."; } && init
+end() {
+    status="$?";
+    [ "$status" -eq 0 ] && bob "cooked..." || bob "failed (exit $status)...";
+    exit "$status"
+} && trap end "EXIT"
+
+## script ######################################################################
 
 # TODO
 
-${CLEAN_UP:-false} && {
-    true
+is_truthy "${CLEAN_UP:-}" && {
+    info "cleaning..."
+    cmd2 rm -r "$OUT"
 }
 
-bob_end
-
-###############################################################################
+################################################################################

@@ -150,12 +150,15 @@ selector() {
 
 }
 
+scan() { find "$1" -maxdepth 1 -type d | grep -Ev '.*\.(bk|old)[0-9]*$'; }
+
 N_PLACES="$(cat <<EOF
-$(find "$HOME/.local/programs" -maxdepth 1 -type d)
-$(find "$HOME/.local/programs/suckless" -maxdepth 1 -type d)
-$(find "$HOME/stuff/code" -maxdepth 1 -type d | grep -Ev '.*\.(bk|old)[0-9]*$')
-$XDG_CONFIG_HOME
-$XDG_CONFIG_HOME/bash
+$(scan "$HOME/.local/programs")
+$(scan "$HOME/.local/programs/suckless")
+$(scan "$HOME/stuff/code")
+$(scan "$HOME/stuff/code/nvim")
+$XscanONFIG_HOME
+$XscanONFIG_HOME/bash
 $XDG_CONFIG_HOME/vim
 $XDG_CONFIG_HOME/nvim
 $HOME/.local/scripts

@@ -10,6 +10,9 @@ alias ls='ls -A --color=auto'
 alias grep='grep --color=auto'
 alias diff='diff --color'
 
+alias minivim='NVIM_APPNAME=mini.nvim nvim'
+command -v nvim 1>/dev/null || alias nvim='vim'
+
 # alias up='sudo xbps-install -Suy'
 alias up='sudo pacman -Syu'
 # alias sudo=doas

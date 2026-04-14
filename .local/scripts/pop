@@ -1,5 +1,13 @@
 #!/bin/sh
 set -eu
-# pop a new st instance in the same pwd
+# pop a new terminal instance in the same pwd
 
-(st -e bash -c "cd $(pwd) && pwd && exec bash" &) 2>/dev/null 1>/dev/null
+term="$(ps -p $(ps -p $(ps -p "$$" -o ppid=) -o ppid=) -o args=)"
+term="${term%% *}"
+CMD="cd $(pwd) && pwd && exec bash"
+
+case "$term" in
+    st)        (st        -e bash -c "$CMD" &) 2>/dev/null 1>/dev/null ;;
+    alacritty) (alacritty -e bash -c "$CMD" &) 2>/dev/null 1>/dev/null ;;
+    *)         echo "pop:error: Unknown term '$term'" 1>&2; exit 1 ;;
+esac

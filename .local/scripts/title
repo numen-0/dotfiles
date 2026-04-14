@@ -30,7 +30,7 @@ EOF
 
 # state
 style="-"
-width=79
+width=80
 fill="fill"      # fill | empty
 justify="left"   # left | right | middle
 top=0

@@ -35,7 +35,8 @@ kernel="kernel:   $(uname -r | cut -d '-' -f1)"
 . /etc/os-release;
 os="os:       $(printf "%s" "$PRETTY_NAME" | tr '[:upper:]' '[:lower:]')";
 # terminal
-term="terminal: $(ps -p $(ps -p $(ps -p $$ -o ppid=) -o ppid=) -o args=)"
+term="$(ps -p $(ps -p $(ps -p $$ -o ppid=) -o ppid=) -o args=)"
+term="terminal: ${term%% *}"
 # shell
 shell="shell:    $(basename "$(echo "$SHELL")")"
 # KD WM

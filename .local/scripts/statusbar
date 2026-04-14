@@ -108,6 +108,25 @@ battery() {
 # 	fi
 # }
 
+VOLUME_STR=""
+SINK="@DEFAULT_AUDIO_SINK@"
+volume_update() {
+    volume_str=$(wpctl get-volume "$SINK")
+    muted="$(echo "$volume_str" | cut -d" " -f3)"
+    vol="$(echo "$volume_str" | cut -d" " -f2 | tr -d "." | sed "s/^0*//")"
+
+	if [ "$muted" = "[MUTED]" ]; then
+        VOLUME_STR=""
+    elif [ "$vol" -ge 65 ]; then
+        VOLUME_STR="$vol% "
+    elif [ "$vol" -ge 40 ]; then
+        VOLUME_STR="$vol% "
+    # elif [ "$vol" -ge 0 ]; then
+    else
+        VOLUME_STR="$vol% "
+    fi
+}
+
 # backlight() {
 #     BRIGHTNESS_DIR="/sys/class/backlight/intel_backlight"
 #     max="$(cat "$BRIGHTNESS_DIR/max_brightness")"
@@ -133,18 +152,18 @@ update_bar() {
     # xsetroot -name " $(clock) ;| $VOLUME_STR | $BATTERY_STR | $(network) | $(day) "
     # xsetroot -name " $(clock) ;| $BATTERY_STR | $(network) | $(day) "
     # xsetroot -name " $(clock) ; $BATTERY_STR | $(day) "
-    xsetroot -name " $(clock) - $(day) ; $BATTERY_STR "
+    xsetroot -name " $(clock) - $(day) ; $VOLUME_STR | $BATTERY_STR "
 }
 
 # to much many lot of problems from this...
-# volumen_change() {
-#     volume_alsa
-#     main_loop
-# }
+volumen_change() {
+    volume_update
+    main_loop
+}
 # brightness_change() {
 #     BRIGHTNESS_STR="$(backlight)"
 # }
-# trap volumen_change    USR1
+trap volumen_change    USR1
 # trap brightness_change USR2
 
 main_loop() {
@@ -161,7 +180,7 @@ main_loop() {
 #     || BRIGHTNESS="low"
 # sudo brightness "$BRIGHTNESS"
 
-# volumen_change
+volumen_change
 # brightness_change
 
 main_loop
